@@ -52,18 +52,28 @@ def read_file():
         label_time_UTC_now.config(text = date_time_file_object.strftime(" %Y.%m.%d %H:%M:%S "))
 
         #  чтение и формирование координат (широта и долгота)
+        # широта
         lat_now = num_csv[3]
         lat_now = lat_now[2:15]
         lat_d = int(lat_now[0:2])
         lat_m = int(lat_now[2:4])
-        lat_s = int(lat_now[5:9])
+        lat_s = float(lat_now[4:13])
+        latitude_file = lat_d + (lat_m / 60) + ((lat_s * 60) / 3600)
+        label_lat_now.config(text=' ' + str(latitude_file)[0:10] + ' ')
 
-        latitude_file = lat_d + (lat_m / 60) + (lat_s / 3600)
 
-        print(lat_d, ' ', lat_m, ' ', lat_s)
-        print(latitude_file)
+        #долгота
+        long_now = num_csv[5]
+        long_now = long_now[2:16]
+        long_d = int(long_now[0:3])
+        long_m = int(long_now[3:5])
+        long_s = float(long_now[5:14])
+        longitude_file = long_d + (long_m / 60) + ((long_s * 60) / 3600)
+        label_long_now.config(text=' ' + str(longitude_file)[0:10] + ' ')
 
-        sleep(1)
+        marker.set_position(latitude_file, longitude_file)
+
+        sleep(0.01)
         i += 1
 
 def bt_on():
@@ -104,6 +114,13 @@ label_time_UTC.place(x = 10, y = 100)
 
 label_time_UTC_now = ttk.Label(frame_tray, text=' 0000.00.00 00:00:00 ', relief='groove', font=('Arial', 20))
 label_time_UTC_now.place(x = 10, y = 130)
+
+label_lat_now = ttk.Label(frame_tray, text=' 00.000 ', relief='groove', font=('Arial', 20))
+label_lat_now.place(x = 10, y = 180)
+
+label_long_now = ttk.Label(frame_tray, text=' 00.000 ', relief='groove', font=('Arial', 20))
+label_long_now.place(x = 10, y = 230)
+
 
 
 bt_exit = ttk.Button(frame_tray, text='ВЫХОД', width=15, command=bt_exit)
