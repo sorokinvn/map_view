@@ -59,22 +59,24 @@ def read_file():
         lat_m = int(lat_now[2:4])
         lat_s = float(lat_now[4:13])
         latitude_file = lat_d + (lat_m / 60) + ((lat_s * 60) / 3600)
-        label_lat_now.config(text=' ' + str(latitude_file)[0:10] + ' ')
+        label_lat_now.config(text=' ' + str(latitude_file)[0:10] + ' ' + num_csv[4] + ' ')
 
 
-        #долгота
+        # долгота
         long_now = num_csv[5]
         long_now = long_now[2:16]
         long_d = int(long_now[0:3])
         long_m = int(long_now[3:5])
         long_s = float(long_now[5:14])
         longitude_file = long_d + (long_m / 60) + ((long_s * 60) / 3600)
-        label_long_now.config(text=' ' + str(longitude_file)[0:10] + ' ')
+        label_long_now.config(text=' ' + str(longitude_file)[0:10] + ' ' + num_csv[6] + ' ')
 
+        # двигаем маркер на карте
         marker.set_position(latitude_file, longitude_file)
 
         sleep(0.01)
         i += 1
+    bt_play.configure(text='ПРОИГРАТЬ', state='normal')
 
 def bt_on():
     thread_01 = Thread(target=play, daemon=True)
@@ -84,6 +86,7 @@ def bt_exit():
     exit()
 
 def bt_play():
+    bt_play.configure(text='ЧИТАЮ', state='disabled')
     thread_03 = Thread(target=read_file, daemon=True)
     thread_03.start()
 
