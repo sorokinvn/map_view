@@ -23,7 +23,9 @@ def play():
 
 # чтение файла с записанными ранее координатами
 def read_file():
+    k_speed = 0.001
     i = 0
+    prog = 0
     with open('gnss.txt', 'r') as f:
         nums = f.read().splitlines()
     len_nums = len(nums)
@@ -73,8 +75,16 @@ def read_file():
 
         # двигаем маркер на карте
         marker.set_position(latitude_file, longitude_file)
+        if i % 2 == 0:
+            map_widget.set_polygon([(latitude_file, longitude_file)], outline_color = 'blue', border_width = 1)
 
-        sleep(0.01)
+        # рисуем прогресс и скорость воспроизведения
+        prog = round((i * 100) / len_nums)
+        prog_bar.config(value = prog)
+        label_prog.config(text = 'Процент воспроизведения: ' + str(prog) + ' %')
+        label_speed.config(text = 'Скорость воспроизведения: x ' + str(1/k_speed))
+
+        sleep(k_speed)
         i += 1
     bt_play.configure(text='ПРОИГРАТЬ', state='normal')
 
@@ -124,6 +134,14 @@ label_lat_now.place(x = 10, y = 180)
 label_long_now = ttk.Label(frame_tray, text=' 00.000 ', relief='groove', font=('Arial', 20))
 label_long_now.place(x = 10, y = 230)
 
+prog_bar = ttk.Progressbar(frame_tray, orient='horizontal', mode='determinate', maximum=100)
+prog_bar.place(x = 10, y = 280, width = 270)
+
+label_prog = ttk.Label(frame_tray, font=('Arial', 10))
+label_prog.place(x = 10, y = 310)
+
+label_speed = ttk.Label(frame_tray, font=('Arial', 10))
+label_speed.place(x = 10, y = 330)
 
 
 bt_exit = ttk.Button(frame_tray, text='ВЫХОД', width=15, command=bt_exit)
